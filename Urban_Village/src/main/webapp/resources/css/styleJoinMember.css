@@ -1,0 +1,426 @@
+
+/* Imported Google Fonts */
+@import
+	url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;500;600;700&display=swap')
+	;
+
+@import
+	url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&display=swap');
+
+body {
+	margin: 0;
+	font-family: 'Nanum Gothic', sans-serif;
+	color: #333;
+	min-height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	/* Align items to the start to allow for top/bottom margins */
+	padding: 20px;
+	box-sizing: border-box;
+	position: relative; /* Needed for overlay pseudo-element positioning */
+}
+
+.form {
+	display: flex; /* Default: Single column for mobile */
+	flex-direction: column;
+	gap: 15px; /* Vertical gap for single column */
+	width: 100%;
+	max-width: 450px; /* Max width for single column */
+	padding: 40px;
+	border-radius: 20px;
+	position: relative;
+	background-color: #FDFCF9; /* Form background color */
+	color: #333;
+	border: 1px solid #D3C6B5;
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+	margin: 15px auto;
+	/* Add top and bottom margin for spacing from header/footer */
+	box-sizing: border-box;
+	z-index: 1; /* Ensure form is above the overlay */
+}
+
+.form-column {
+	display: flex;
+	flex-direction: column;
+	gap: 15px; /* Vertical gap within each column */
+	width: 100%;
+}
+
+/* Explicitly define column widths within the form for mobile to ensure they take full width */
+.left-column, .right-column {
+	width: 100%;
+}
+
+.title {
+	font-size: 28px;
+	font-weight: 700;
+	letter-spacing: -1px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	padding-left: 30px;
+	color: #4A3E38;
+	font-family: 'Noto Serif KR', serif;
+	margin-bottom: 15px;
+}
+
+.title::before, .title::after {
+	position: absolute;
+	content: "";
+	height: 16px;
+	width: 16px;
+	border-radius: 50%;
+	left: 0px;
+	background-color: #A07A61;
+}
+
+.title::before {
+	width: 18px;
+	height: 18px;
+}
+
+.title::after {
+	width: 18px;
+	height: 18px;
+	animation: pulse 1s linear infinite;
+}
+
+.message, .signin {
+	font-size: 15px;
+	color: #6B4F4F;
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.signin {
+	text-align: center;
+	font-size: 14px;
+	color: #666;
+}
+
+.signin a:hover {
+	text-decoration: underline #A07A61;
+}
+
+.signin a {
+	color: #A07A61;
+	font-weight: 600;
+	text-decoration: none;
+	transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.flex {
+	display: flex;
+	width: 100%;
+	gap: 10px;
+	align-items: flex-end;
+}
+
+.flex label {
+	flex-grow: 1;
+	flex-direction: column;
+	display: flex;
+}
+
+.form label {
+	position: relative;
+	width: 100%;
+}
+
+/* Date input group styles */
+.date-input-group {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	gap: 8px; /* Gap between label and input */
+}
+
+/* Label for date input field */
+.date-input-group label {
+	position: static; /* Remove absolute positioning */
+	margin-bottom: 0;
+	font-size: 15px;
+	color: #6B4F4F;
+	font-weight: 500;
+}
+
+.form label .input, .form label select.input, .date-input-group .input {
+	/* Style for all input types including date */
+	background-color: #FDFCF9;
+	color: #333;
+	width: 100%;
+	padding: 14px 10px;
+	outline: 0;
+	border: 1px solid #D3C6B5;
+	border-radius: 8px;
+	box-sizing: border-box;
+	font-size: 16px;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Custom select arrow */
+.form label select.input {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-image:
+		url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23A07A61%22%20d%3D%22M287%2C114.7L159.3%2C2.1c-5.9-5.9-15.4-5.9-21.2%2C0L5.4%2C114.7c-5.9%2C5.9-5.9%2C15.4%2C0%2C21.2l14.1%2C14.1%20113.6%2C113.6%20113.6%2C-113.6%2014.1%2C-14.1C292.9%2C130.1%2C292.9%2C120.5%2C287%2C114.7z%22%2F%3E%3C%2Fsvg%3E');
+	background-repeat: no-repeat;
+	background-position: right 10px top 50%;
+	background-size: 12px auto;
+	padding-right: 30px;
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+
+/* Adjust date input padding if needed for browser default icon */
+.date-input-group .input[type="date"] {
+	padding: 14px 10px;
+	padding-right: 10px; /* Ensure space for default date picker icon */
+}
+
+/* Floating label styles for inputs (not in date-input-group) */
+.form label:not(.date-input-group label) .input+span {
+	color: #6B4F4F;
+	position: absolute;
+	left: 10px;
+	top: 14px; /* Initial position */
+	font-size: 0.9em;
+	cursor: text;
+	transition: 0.3s ease;
+	pointer-events: none;
+}
+
+/* Adjust floating label position for select */
+.form label select.input+span {
+	top: 14px; /* Align with select padding */
+}
+
+/* Hide span for labels within date-input-group as the label text is used directly */
+.date-input-group label span {
+	display: none;
+}
+
+.form label:not(.date-input-group label) .input:placeholder-shown+span {
+	top: 14px;
+	font-size: 0.9em;
+	color: #6B4F4F;
+}
+
+.form label:not(.date-input-group label) .input:focus+span, .form label:not(.date-input-group label) .input:valid+span
+	{
+	color: #A07A61;
+	top: 0px;
+	font-size: 0.75em;
+	font-weight: 600;
+	background-color: #FDFCF9;
+	padding: 0 5px;
+	left: 8px;
+}
+/* Floating label position for select on focus/valid */
+.form label select.input:focus+span, .form label select.input:valid+span
+	{
+	top: 0px;
+}
+
+.input {
+	font-size: 16px;
+}
+
+.submit {
+	border: none;
+	outline: none;
+	padding: 12px;
+	border-radius: 8px;
+	color: white;
+	font-size: 17px;
+	font-weight: 700;
+	background-color: #A07A61;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.1s ease;
+	margin-top: 5px;
+}
+
+.submit:hover {
+	background-color: #8D6C55;
+}
+
+.submit:active {
+	transform: scale(0.98);
+}
+
+.submit:disabled {
+	background-color: #D3C6B5;
+	cursor: not-allowed;
+}
+
+@keyframes pulse {from { transform:scale(0.9);
+	opacity: 1;
+}
+
+to {
+	transform: scale(1.8);
+	opacity: 0;
+}
+
+}
+
+/* Two-column layout for medium screens and up */
+@media ( min-width : 768px) {
+	.form {
+		display: grid;
+		grid-template-columns: 1fr 1fr; /* Two equal columns */
+		gap: 40px 40px;
+		/* Vertical gap between rows, Horizontal gap between columns */
+		max-width: 800px; /* Increased max width for two columns */
+	}
+
+	/* Place column divs into grid columns */
+	.form-column.left-column {
+		grid-column: 1; /* Place in the first column */
+	}
+	.form-column.right-column {
+		grid-column: 2; /* Place in the second column */
+	}
+
+	/* Elements that span across both columns */
+	.form .title, .form .message, .form .submit, .form .signin {
+		grid-column: 1/span 2; /* Start at column 1 and span 2 columns */
+	}
+
+	/* Adjust margin for elements that now span two columns */
+	.form .message {
+		margin-bottom: 0;
+		/* Reduce bottom margin as it's followed by columns */
+	}
+
+	/* Adjust top margin for the submit button to create space after columns */
+	.form .submit {
+		margin-top: 20px;
+		/* Increase top margin to space from columns above */
+	}
+
+	/* Ensure flex items (input + button) in .flex behave correctly in the grid cell */
+	.flex {
+		width: 100%; /* Ensure flex container takes full width of grid cell */
+	}
+	.flex label {
+		flex-grow: 1; /* Allow label to take up remaining space */
+	}
+
+	/* Adjust layout for the email section buttons on large screens */
+	.form .flex:has(#email) {
+		flex-direction: row; /* Make it a row for side-by-side layout */
+		align-items: flex-end; /* Align items to the bottom */
+		gap: 10px;
+	}
+	.form .flex:has(#email) label {
+		flex-grow: 1; /* Email input takes remaining space */
+		/* Ensure vertical alignment with button */
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end; /* Align content to bottom */
+	}
+	.form .flex:has(#email) button {
+		/* Let the button take a fixed width */
+		flex: 0 0 120px; /* Fixed basis for width, prevent growing/shrinking */
+		height: auto; /* Height determined by padding/content */
+		margin-top: 0; /* Remove default top margin */
+		align-self: flex-end; /* Align to the bottom */
+	}
+}
+
+/* Small screen (mobile) adjustments */
+@media ( max-width : 576px) {
+	.form {
+		padding: 20px;
+		gap: 10px;
+		margin: 15px auto; /* Ensure margin is applied */
+	}
+	.title {
+		font-size: 24px;
+		padding-left: 25px;
+	}
+	.title::before, .title::after {
+		width: 14px;
+		height: 14px;
+	}
+	.message, .signin {
+		font-size: 14px;
+		margin-bottom: 15px;
+	}
+	.submit {
+		padding: 10px;
+		font-size: 15px;
+	}
+	.form label .input, .form label select.input, .date-input-group .input {
+		padding: 12px 10px;
+		font-size: 15px;
+	}
+
+	/* Floating label adjustments for small screens */
+	.form label:not(.date-input-group label) .input+span {
+		top: 11px;
+		font-size: 0.8em;
+	}
+	.form label:not(.date-input-group label) .input:placeholder-shown+span {
+		top: 11px;
+	}
+	.form label:not(.date-input-group label) .input:focus+span, .form label:not(.date-input-group label) .input:valid+span
+		{
+		top: 0px;
+		font-size: 0.7em;
+	}
+	.form label select.input:focus+span, .form label select.input:valid+span
+		{
+		top: 0px;
+	}
+}
+
+/* Specific adjustments for the email verification section */
+#verificationSection label {
+	margin-top: 15px; /* Add some space above the verification input */
+	margin-bottom: 0; /* Remove bottom margin */
+}
+/* Adjust flex layout for email and verification buttons */
+.form .flex:has(#email) {
+	/* Target the flex containing the email input */
+	flex-direction: column; /* Stack vertically on small screens */
+	align-items: stretch; /* Stretch items to full width */
+	gap: 10px;
+}
+
+.form .flex:has(#email) label, .form .flex:has(#email) button {
+	width: 100%;
+	/* Make items in this flex column full width on small screens */
+	flex: none; /* Remove flex properties that might interfere */
+}
+/* Hide the span label for the verification input as we will use the placeholder */
+#verificationSection label span {
+	display: none;
+}
+/* Style the verification input placeholder */
+#verificationSection label .input::placeholder {
+	color: #6B4F4F;
+	opacity: 0.7; /* Make placeholder slightly transparent */
+}
+
+/* --- Styles for the smaller Email Verification Buttons --- */
+#sendCodeBtn, #verifyBtn {
+	padding: 12px 15px; /* Adjusted padding to better match input height */
+	font-size: 15px; /* Slightly increased font size */
+	/* Remove inline styles that set explicit height/flex-basis */
+	height: auto !important; /* Override any fixed height */
+	margin-top: 5px; /* Add a small margin above the buttons */
+}
+/* Specific style for the verify button when shown */
+#verifyBtn {
+	/* No extra styles needed here, inherits from #sendCodeBtn */
+	margin-top: 10px; /* Add a bit more space above verify button */
+}
+
+/* Adjustments for the first flex container (ID check) */
+.form .flex:has(#id) label {
+	flex-grow: 1

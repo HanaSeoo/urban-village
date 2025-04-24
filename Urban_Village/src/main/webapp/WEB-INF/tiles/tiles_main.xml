@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+"-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+"http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+<tiles-definitions>
+	<definition name="mainLayout"
+		template="/WEB-INF/views/common/layout.jsp">
+		<put-attribute name="title" value=""></put-attribute>
+		<put-attribute name="header"
+			value="/WEB-INF/views/common/header.jsp"></put-attribute>
+		<put-attribute name="body" value=""></put-attribute>
+		<put-attribute name="footer"
+			value="/WEB-INF/views/common/footer.jsp"></put-attribute>
+	</definition>
+
+ 	<definition name="urbanMain" extends="mainLayout">
+		<put-attribute name="title" value="Urban_Village"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/urbanMain.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/member/joinMember" extends="mainLayout">
+		<put-attribute name="title" value="Urban_Village"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/joinMember.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/member/urbanMemberList"
+		extends="mainLayout">
+		<put-attribute name="title" value="Urban Member List"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/urbanMemberList.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/accommodation/accommodationPage"
+		extends="mainLayout">
+		<put-attribute name="title" value="상세페이지"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/accommodation/accommodationPage.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/accommodation/accommodationForm"
+		extends="mainLayout">
+		<put-attribute name="title" value="숙소등록페이지"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/accommodation/accommodationForm.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/reservation/reservationForm"
+		extends="mainLayout">
+		<put-attribute name="title" value="예약페이지"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/reservation/reservationForm.jsp"></put-attribute>
+	</definition>
+
+
+	<definition name="/admin/cleanerList" extends="mainLayout">
+		<put-attribute name="title" value="지원자현황"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/admin/cleanerList.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/admin/cleanerDetail" extends="mainLayout">
+		<put-attribute name="title" value="지원자정보"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/admin/cleanerDetail.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/accommodation/accommodationList"
+		extends="mainLayout">
+		<put-attribute name="title" value="숙소리스트"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/admin/accommodationList.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/member/salesForm.do" extends="mainLayout">
+		<put-attribute name="title" value="매출 현황"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/salesForm.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/accommodation/searchResults"
+		extends="mainLayout">
+		<put-attribute name="title" value="검색"></put-attribute>
+		<put-attribute name="body"
+			value="/WEB-INF/views/accommodation/searchResults.jsp"></put-attribute>
+	</definition>
+
+	<definition name="/member/myInfo" extends="mainLayout">
+		<put-attribute name="title" value="내정보 확인" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/myInfo.jsp" />
+	</definition>
+	<definition name="/member/deleteMemberForm"
+		extends="mainLayout">
+		<put-attribute name="title" value="회원탈퇴" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/deleteMemberForm.jsp" />
+	</definition>
+	<definition name="/wishList/wishListadd"
+		extends="mainLayout">
+		<put-attribute name="title" value="위시리스트" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/wishList/wishListadd.jsp" />
+	</definition>
+	<definition name="/reservation/reservationHistory"
+		extends="mainLayout">
+		<put-attribute name="title" value="예약내역" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/reservation/reservationHistory.jsp" />
+	</definition>
+	
+	<definition name="/cleaner/cleanerForm" extends="mainLayout">
+		<put-attribute name="title" value="지원양식" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/cleaner/cleanerForm.jsp" />
+	</definition>
+	
+	<definition name="/member/couponList" extends="mainLayout">
+		<put-attribute name="title" value="내 쿠폰함" />
+		<put-attribute name="body"
+			value="/WEB-INF/views/member/couponList.jsp" />
+	</definition>
+	
+	<definition name="/member/urbanMemberList"
+      extends="mainLayout">
+      <put-attribute name="title" value="Urban Member List"></put-attribute>
+      <put-attribute name="body"
+         value="/WEB-INF/views/member/urbanMemberList.jsp"></put-attribute>
+    </definition>
+    
+    <definition name="/admin/hostAccBest"
+      extends="mainLayout">
+      <put-attribute name="title" value="호스트 추천 등록"></put-attribute>
+      <put-attribute name="body"
+         value="/WEB-INF/views/admin/hostAccBest.jsp"></put-attribute>
+    </definition>
+    
+    <definition name="/accommodation/accommodationList"
+      extends="mainLayout">
+      <put-attribute name="title" value="숙소리스트"></put-attribute>
+      <put-attribute name="body"
+         value="/WEB-INF/views/accommodation/accommodationList.jsp"></put-attribute>
+    </definition>
+    
+    <definition name="/accommodation/modAccommodationForm"
+      extends="mainLayout">
+      <put-attribute name="title" value="숙소 수정/삭제"></put-attribute>
+      <put-attribute name="body"
+         value="/WEB-INF/views/accommodation/modAccommodationForm.jsp"></put-attribute>
+    </definition>
+    
+    <definition name="/reservation/reviewList"  extends="mainLayout">
+      <put-attribute name="title" value="고객 리뷰 리스트"></put-attribute>
+      <put-attribute name="body"
+         value="/WEB-INF/views/reservation/reviewList.jsp"></put-attribute>
+    </definition>
+    
+    <definition name="/reservation/reviewWrite"  extends="mainLayout">
+      <put-attribute name="title" value="리뷰 작성 폼"></put-attribute>
+      <put-attribute name="body"
+         value="/WEB-INF/views/reservation/reviewWrite.jsp"></put-attribute>
+    </definition>
+    
+    
+	
+	
+
+</tiles-definitions>

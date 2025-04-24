@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.test.Urban_Village.wishList.dao.WishListDAO">
+
+    <insert id="insertWishlist" parameterType="com.test.Urban_Village.wishList.dto.WishListDTO">
+        <selectKey keyProperty="wishlistId" order="BEFORE" resultType="int">
+            SELECT SEQ_WISHLIST_ID.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO WISHLIST (WISHLIST_ID, MEMBER_ID, ACCOMMODATION_ID)
+        VALUES (#{wishlistId}, #{memberId}, #{accommodationId})
+    </insert>
+
+    <delete id="deleteWishlist" parameterType="com.test.Urban_Village.wishList.dto.WishListDTO">
+        DELETE FROM WISHLIST
+        WHERE MEMBER_ID = #{memberId}
+          AND ACCOMMODATION_ID = #{accommodationId}
+    </delete>
+
+    <select id="selectWishlistByMemberId"
+            parameterType="java.lang.String"
+            resultType="com.test.Urban_Village.wishList.dto.WishListDTO">
+        SELECT
+        WISHLIST_ID as wishId, MEMBER_ID as memberId,
+        ACCOMMODATION_ID as accommodationId
+        FROM
+        WISHLIST
+        WHERE
+        MEMBER_ID = #{member_id}
+    </select>
+
+    <select id="selectWishlistByMemberIdAndAccommodationId"
+            parameterType="com.test.Urban_Village.wishList.dto.WishListDTO"
+            resultType="com.test.Urban_Village.wishList.dto.WishListDTO">
+        SELECT
+        WISHLIST_ID as wishId, MEMBER_ID as memberId,
+        ACCOMMODATION_ID as accommodationId
+        FROM
+        WISHLIST
+        WHERE
+        MEMBER_ID = #{memberId}
+          AND ACCOMMODATION_ID = #{accommodationId}
+    </select>
+
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.accommodation"> <resultMap type="accDTO" id="accResult">
+        <result property="accommodationId" column="accommodationId"></result>
+        <result property="adminId" column="adminId"></result>
+        <result property="accommodationName" column="accommodationName"></result>
+        <result property="accommodationPhoto" column="accommodationPhoto"></result>
+        <result property="cleanerAdminId" column="cleanerAdminId"></result>
+        <result property="capacity" column="capacity"></result>
+        <result property="roomCount" column="roomCount"></result>
+        <result property="bathroomCount" column="bathroomCount"></result>
+        <result property="bedCount" column="bedCount"></result>
+        <result property="wifiAvail" column="wifiAvail"></result>
+        <result property="reviewData" column="reviewData"></result>
+    </resultMap>
+
+    <select id="accList" resultMap="accResult">
+        select * from accommodation order by accommodation_id desc
+    </select>
+    
+    <select id="findAccommodationById" parameterType="string" resultMap="accResult">
+        SELECT *
+        FROM accommodation
+        WHERE accommodation_id = #{accommodation_id}
+    </select>
+</mapper>

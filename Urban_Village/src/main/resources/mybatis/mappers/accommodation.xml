@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.accommodation">
+	<resultMap type="accDTO" id="accResult">
+		<result property="accommodation_id" column="accommodation_id" />
+		<result property="admin_id" column="admin_id" />
+		<result property="accommodation_name"
+			column="accommodation_name" />
+		<result property="accommodation_photo"
+			column="accommodation_photo" />
+		<result property="cleaner_admin_id" column="cleaner_admin_id" />
+		<result property="capacity" column="capacity" />
+		<result property="room_count" column="room_count" />
+		<result property="bathroom_count" column="bathroom_count" />
+		<result property="bed_count" column="bed_count" />
+		<result property="price" column="price" />
+		<result property="accommodation_address" column="accommodation_address"/>
+		<result property="view_count" column="view_count"/>
+		<result property="reservation_count" column="reservation_count"/>
+		   
+	</resultMap>
+
+
+	<select id="accList" resultMap="accResult">
+		select * from accommodation order
+		by accommodation_id desc
+	</select>
+
+	<insert id="addAccommodation" parameterType="accDTO">
+		INSERT INTO
+		accommodation (accommodation_id, admin_id, accommodation_name,
+		accommodation_photo, cleaner_admin_id, capacity, room_count,
+		bathroom_count, bed_count, wifi_avail, price)
+		VALUES ('ACC' ||
+		LPAD(accommodation_seq.NEXTVAL, 5, '0'), #{admin_id},
+		#{accommodation_name}, #{accommodation_photo}, #{cleaner_admin_id},
+		#{capacity}, #{room_count}, #{bathroom_count}, #{bed_count},
+		#{wifi_avail}, #{price})
+	</insert>
+
+	<!-- 방금 삽입한 숙소 ID 가져오기 -->
+	<select id="getLastInsertedAccommodationId2" resultType="String">
+		SELECT
+		'ACC' || LPAD(accommodation_seq.CURRVAL, 5, '0') FROM DUAL
+	</select>
+
+
+	<select id="findAccommodationId" parameterType="string"
+		resultMap="accResult">
+		SELECT * FROM accommodation WHERE accommodation_id = #{value}
+	</select>
+
+	<insert id="insertAccommodation" parameterType="map">
+        insert into accommodation 
+        (admin_id,accommodation_address, accommodation_name, accommodation_photo, cleaner_admin_id, capacity, room_count, bathroom_count, bed_count, price, wifi_avail)
+        values
+        (#{admin_id}, #{accommodation_address},#{accommodation_name}, #{accommodation_photo}, #{cleaner_admin_id}, #{capacity}, #{room_count}, #{bathroom_count}, #{bed_count}, #{price}, #{wifi_avail})
+    </insert>
+
+	<select id="getLastInsertedAccommodationId" resultType="string">
+		SELECT accommodation_id
+		FROM (
+		SELECT accommodation_id
+		FROM accommodation
+		ORDER BY accommodation_id DESC
+		)
+		WHERE ROWNUM = 1
+	</select>
+
+	<delete id="delAccommodation" parameterType="string">
+		DELETE FROM accommodation WHERE accommodation_id = #{accommodation_id}
+	</delete>
+
+	<select id="idFindByAccList" parameterType="accDTO"
+		resultMap="accResult">
+		SELECT * FROM accommodation WHERE accommodation_id =
+		#{accommodation_id}
+	</select>
+
+	<update id="updateAccommodation" parameterType="map">
+		UPDATE accommodation
+		SET
+		admin_id = #{admin_id},
+		accommodation_name = #{accommodation_name},
+		<if
+			test="accommodation_photo != null and accommodation_photo != ''">
+			accommodation_photo = #{accommodation_photo},
+		</if>
+		cleaner_admin_id = #{cleaner_admin_id},
+		capacity = #{capacity},
+		room_count = #{room_count},
+		bathroom_count = #{bathroom_count},
+		bed_count = #{bed_count},
+		price = #{price},
+		wifi_avail = #{wifi_avail}
+		WHERE accommodation_id = #{accommodation_id}
+	</update>
+	<select id="checkAccommodationName" parameterType="string"
+		resultType="string">
+		SELECT accommodation_name
+		FROM accommodation
+		WHERE accommodation_name = #{name}
+	</select>
+	<select id="countName" parameterType="string" resultType="int">
+		select count(*) from accommodation where accommodation_name =
+		#{accommodation_name ,jdbcType=VARCHAR}
+	</select>
+
+	<select id="searchByRegions" parameterType="list"
+		resultType="accDTO">
+		SELECT *
+		FROM accommodation
+		WHERE
+		<foreach collection="list" item="region" open="("
+			separator="OR" close=")">
+			accommodation_address LIKE '%' || #{region} || '%'
+		</foreach>
+	</select>
+	<select id="searchAccommodation" parameterType="string" resultType="accDTO">
+        SELECT * 
+        FROM accommodation
+        WHERE accommodation_name LIKE #{keyword}
+        or accommodation_address like #{keyword}
+    </select>
+    
+ <update id="increaseViewCount" parameterType="String">
+	    UPDATE accommodation 
+	    SET view_count = view_count + 1 
+	    WHERE accommodation_id = #{accommodation_id}
+	</update>
+	
+	<select id="getViewCount" resultType="int">
+		select view_count from accommodation where accommodation_id=#{accommodation_id}
+	</select>
+	
+	 <!-- 예약 수 순 정렬 -->
+    <select id="selectAccommodationsSortedByReservation" resultType="accDTO">
+        SELECT 
+		    a.accommodation_id,
+		    a.accommodation_name,
+		    a.accommodation_address,
+		    a.accommodation_photo,
+		    a.capacity,
+		    a.price,
+		    COUNT(p.accommodation_id) AS reservation_count
+		FROM 
+		    accommodation a
+		LEFT JOIN 
+		    pay p ON a.accommodation_id = p.accommodation_id
+		GROUP BY 
+		    a.accommodation_id,
+		    a.accommodation_name,
+		    a.accommodation_address,
+		    a.accommodation_photo,
+		    a.capacity,
+		    a.price
+		ORDER BY 
+		    reservation_count DESC
+    </select>
+
+    <!-- 조회수 순 정렬 -->
+    <select id="selectAccommodationsSortedByViewCount" resultType="accDTO">
+        SELECT *
+        FROM accommodation
+        ORDER BY view_count DESC
+    </select>
+    <select id="getReservationCountByAccommodationId" resultType="Integer">
+        SELECT COUNT(*) 
+        FROM pay 
+        WHERE accommodation_id = #{accommodationId}
+    </select>
+    
+</mapper>

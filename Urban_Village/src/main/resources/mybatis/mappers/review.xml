@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.review">
+
+	<resultMap type="reviewDTO" id="review">
+		<result property="accommodation_name"
+			column="accommodation_name"></result>
+		<result property="review_data" column="review_data"></result>
+		<result property="id" column="id"></result>
+		<result property="rating" column="rating"></result>
+		<result property="review_photo" column="review_photo"></result>
+		<result property="averageRating" column="averageRating"></result>
+		<result property="accommodation_id"
+			column="accommodation_id"></result>
+	</resultMap>
+
+
+
+	<!-- <select id="getLastInsertedReviewId" resultType="string"> SELECT review_id 
+		FROM review WHERE ROWNUM = 1 ORDER BY review_id DESC </select> -->
+
+	<!-- <select id="getLastInsertedReviewId" resultType="string">
+		SELECT review_seq.NEXTVAL
+		FROM dual
+	</select> -->
+	
+	<select id="getLastInsertedReviewId" resultType="string">
+    SELECT review_id
+	FROM (
+	    SELECT review_id
+	    FROM review
+	    ORDER BY TO_NUMBER(SUBSTR(review_id, 2)) DESC
+	)
+	WHERE ROWNUM = 1
+</select>
+
+	<!-- 리뷰 삽입 -->
+<insert id="insertReview" parameterType="map">
+    INSERT INTO review (
+    accommodation_id,
+    	accommodation_name,
+        id,
+        review_data,
+        rating,
+        review_photo,
+        created_at
+    ) VALUES (
+    #{accommodation_id},
+    	#{accommodation_name},
+        #{id},
+        #{review_data},
+        #{rating},
+        #{review_photo, jdbcType=VARCHAR},
+        CURRENT_TIMESTAMP
+    )
+</insert>
+
+	<!-- 특정 숙소 이름으로 리뷰 조회 -->
+	<select id="getReviewsByAccommodationId" parameterType="string" resultType="reviewDTO">
+    SELECT *
+    FROM review
+    WHERE accommodation_name = #{accommodationName}
+    ORDER BY created_at DESC
+</select>
+
+<select id="getAverageRatingByAccommodationId" parameterType="string" resultType="double">
+    SELECT ROUND(AVG(rating), 2) AS averageRating
+    FROM review
+    WHERE accommodation_id = #{accommodationId}
+</select>
+<select id="getLatestReview" parameterType="String" resultType="String">
+    SELECT review_data
+      FROM (
+          SELECT review_data
+          FROM review
+          WHERE accommodation_id = #{accommodation_id}
+          ORDER BY created_at DESC
+      )
+      WHERE ROWNUM = 1
+</select>
+<delete id="delReview">
+   DELETE FROM review WHERE id = #{id} 
+   </delete>
+   
+<select id="getRiviewList" resultType="reviewDTO">
+		select * from review ORDER BY created_at DESC
+	</select>
+	<delete id="deleteReview" parameterType="string">
+        DELETE FROM review WHERE review_id = #{reviewId}
+    </delete>
+   
+</mapper> 

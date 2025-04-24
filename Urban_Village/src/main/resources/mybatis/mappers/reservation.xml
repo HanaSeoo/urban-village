@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.reservation">
+
+	<resultMap type="payDTO" id="payResult">
+		<result property="reservation_id" column="reservation_id"></result>
+		<result property="id" column="id"></result>
+		<result property="accommodation_id" column="accommodation_id"></result>
+		<result property="checkin_date" column="checkin_date"></result>
+		<result property="checkout_date" column="checkout_date"></result>
+		<result property="phonenumber" column="phonenumber"></result>
+		<result property="guest_count" column="guest_count"></result>
+		<result property="total_price" column="total_price"></result>
+		<result property="final_price" column="final_price"></result>
+
+	</resultMap>
+
+	<delete id="delReservation" parameterType="string">
+		delete from pay where
+		reservation_id = #{reservation_id}
+	</delete>
+	<insert id="addPay" parameterType="payDTO">
+		INSERT INTO pay (
+		accommodation_id,
+		id,
+		reservation_id,
+		checkin_date,
+		checkout_date,
+		guest_count,
+		total_price,
+		final_price,
+		coupon_id
+		) VALUES (
+		#{accommodation_id},
+		#{id},
+		#{reservation_id}, <!-- JSP에서 전달된 reservation_id -->
+		#{checkin_date},
+		#{checkout_date},
+		#{guest_count},
+		#{total_price},
+		#{final_price},
+		#{coupon_id}
+		)
+	</insert>
+	<select id="payList" resultMap="payResult">
+		select * from pay order by
+		reservation_id asc
+	</select>
+	<select id="reservationGetUserId" parameterType="string"
+		resultType="payDTO">
+		SELECT
+		p.reservation_id,
+		p.id,
+		p.accommodation_id,
+		a.accommodation_name, <!-- 
+			Include accommodation name -->
+		p.checkin_date,
+		p.checkout_date,
+		p.guest_count,
+		p.total_price,
+		p.final_price,
+		p.coupon_id
+		FROM pay p
+		JOIN accommodation a ON
+		p.accommodation_id = a.accommodation_id
+		WHERE p.id = #{loginId}
+	</select>
+
+	<select id="checkReservationDate" resultType="int"
+		parameterType="java.util.HashMap">
+		SELECT COUNT(*)
+		FROM pay
+		WHERE accommodation_id =
+		#{accommodation_id}
+		AND (
+		(checkin_date &lt; #{checkout_date} AND
+		checkout_date &gt; #{checkin_date})
+		)
+	</select>
+
+	<select id="getReservedDates" resultType="java.util.Map" parameterType="string">
+    SELECT checkin_date, checkout_date
+    FROM pay
+    WHERE accommodation_id = #{accommodation_id}
+</select>
+<select id="selectReservationHistoryByUserId" resultType="payDTO" parameterType="String">
+        SELECT *
+        FROM
+            pay
+        WHERE
+            id = #{userId}
+    </select>
+
+
+</mapper> 

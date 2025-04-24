@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC 
+	"-//mybatis.org/DTD Config 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.test.Urban_Village.member.dto.MemberDTO"
+			alias="memberDTO" />
+			<typeAlias type="com.test.Urban_Village.reservation.dto.PayDTO"
+			alias="payDTO" />
+			<typeAlias type="com.test.Urban_Village.accommodation.dto.AccommodationDTO"
+			alias="accDTO" />
+			<typeAlias type="com.test.Urban_Village.accommodation.dto.AccommodationIdDTO"
+			alias="accIdDTO" />
+			<typeAlias type="com.test.Urban_Village.admin.dto.AdminDTO" alias="AdminDTO"/>
+			<typeAlias type="com.test.Urban_Village.cleaner.dto.CleanerDTO" alias="cleanerDTO"/>
+			<typeAlias type="com.test.Urban_Village.wishList.dto.WishListDTO" alias="WishListDTO"/>
+			<typeAlias type="com.test.Urban_Village.member.dto.PayDTO" alias="mem_payDTO" />
+			<typeAlias type="com.test.Urban_Village.review.dto.ReviewDTO" alias="reviewDTO"/>
+	</typeAliases>
+	
+</configuration>

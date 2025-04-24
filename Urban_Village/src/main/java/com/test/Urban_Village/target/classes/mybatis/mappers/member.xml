@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.member">
+	<resultMap type="memberDTO" id="memResult">
+		<result property="id" column="id"></result>
+		<result property="pwd" column="pwd"></result>
+		<result property="name" column="name"></result>
+		<result property="birth" column="birth"></result>
+		<result property="gender" column="gender"></result>
+		<result property="phonenumber" column="phonenumber"></result>
+		<result property="regdate" column="regdate"></result>
+		<result property="moddate" column="moddate"></result>
+		<result property="email" column="email"></result>
+	</resultMap>
+	
+	
+
+	<select id="selectAllMemberList" resultMap="memResult">
+		select * from member order by id desc
+	</select>
+	<select id="login" parameterType="memberDTO" resultMap="memResult">
+		select * from member where id=#{id} and pwd=#{pwd}
+	</select>
+	
+	<insert id="join">
+      INSERT INTO member (id, pwd, email, birth, gender, phonenumber, name,regdate)
+        VALUES (#{id}, #{pwd}, #{email}, #{birth}, #{gender}, #{phonenumber}, #{name},sysdate)
+   </insert>
+   <select id="countMemberById" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM member WHERE id = #{id}
+    </select>
+    
+    <insert id="addPay" parameterType="payDto">
+    	insert into pay values(#{reservation_id}, #{id},#{accommodation_id},#{checkin_date},#{checkout_date},#{guest_count},#{total_price})
+    </insert>
+</mapper> 

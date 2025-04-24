@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.member">
+	<resultMap type="memberDTO" id="memResult">
+		<result property="id" column="id"></result>
+		<result property="pwd" column="pwd"></result>
+		<result property="name" column="name"></result>
+		<result property="birth" column="birth"></result>
+		<result property="gender" column="gender"></result>
+		<result property="phonenumber" column="phonenumber"></result>
+		<result property="regdate" column="regdate"></result>
+		<result property="moddate" column="moddate"></result>
+		<result property="email" column="email"></result>
+		<result property="join_type" column="join_type"></result>
+		<result property="coupon_id" column="coupon_id"></result>
+		<result property="discount" column="discount"></result>
+		<result property="coupon_name" column="coupon_name"></result>
+		<result property="expiration_date" column="expiration_date"></result>
+		<result property="is_used" column="is_used"></result>
+		<result property="used_date" column="used_date"></result>
+	</resultMap>
+
+	<resultMap type="payDTO" id="payResult">
+		<result property="reservation_id" column="reservation_id"></result>
+		<result property="id" column="id"></result>
+		<result property="accommodation_id" column="accommodation_id"></result>
+		<result property="checkin_date" column="checkin_date"></result>
+		<result property="checkout_date" column="checkout_date"></result>
+		<result property="phonenumber" column="phonenumber"></result>
+		<result property="guest_count" column="guest_count"></result>
+		<result property="total_price" column="total_price"></result>
+	</resultMap>
+	<resultMap type="mem_payDTO" id="mem_payResult">
+		<result property="sale_date" column="sale_date"></result>
+		<result property="sales_month" column="sales_month"></result>
+		<result property="sales_year" column="sales_year"></result>
+		<result property="total_sales" column="total_sales"></result>
+	</resultMap>
+
+
+	<delete id="deleteMember" parameterType="string">
+		DELETE FROM member WHERE id = #{id}
+	</delete>
+	<select id="selectAllMemberList" resultMap="memResult">
+		select * from member
+		order by id desc
+	</select>
+	<select id="login" parameterType="memberDTO"
+		resultMap="memResult">
+		select * from member where id=#{id} and pwd=#{pwd}
+	</select>
+
+	<insert id="join">
+		INSERT INTO member (id, pwd, email, birth, gender,
+		phonenumber,
+		name,regdate)
+		VALUES (#{id}, #{pwd}, #{email}, #{birth},
+		#{gender}, #{phonenumber},
+		#{name},sysdate)
+	</insert>
+	<select id="countMemberById" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*) FROM member WHERE id = #{id}
+	</select>
+
+	<insert id="addPay" parameterType="payDTO">
+		INSERT INTO pay
+		(accommodation_id, id, reservation_id, checkin_date, checkout_date,
+		guest_count,
+		total_price)
+		VALUES
+		(#{accommodation_id},#{id},
+		#{reservation_id},
+		#{checkin_date}, #{checkout_date},
+		#{guest_count},
+		#{total_price})
+	</insert>
+	<select id="payList" resultMap="payResult">
+		select * from pay order by
+		reservation_id desc
+	</select>
+	<select id="reservationGetUserId" parameterType="string"
+		resultType="payDTO">
+		SELECT
+		p.reservation_id,
+		p.id,
+		p.accommodation_id,
+		a.accommodation_name, -- 숙소 이름 추가
+		p.checkin_date,
+		p.checkout_date,
+		p.guest_count,
+		p.total_price
+		FROM
+		pay p
+		JOIN
+		accommodation a ON p.accommodation_id = a.accommodation_id
+		WHERE
+		p.id = #{loginId}
+	</select>
+	<select id="getUserInfoById" parameterType="String"
+		resultType="memberDTO">
+		SELECT id, pwd, email, birth, gender, phonenumber, name
+		FROM member
+		WHERE id = #{id}
+	</select>
+	<update id="modMember" parameterType="memberDTO">
+		UPDATE member
+		SET
+		pwd=#{pwd},
+		email=#{email},
+		phonenumber=#{phonenumber},
+		name=#{name}
+		WHERE id=#{id}
+	</update>
+	<select id="selectDailySales" resultMap="mem_payResult">
+		SELECT sale_date, total_sales FROM daily_sales_view ORDER BY sale_date DESC
+	</select>
+
+	<select id="selectMonthlySales" resultMap="mem_payResult">
+		SELECT sales_month, total_sales FROM monthly_sales_view ORDER BY sales_month
+		DESC
+	</select>
+
+	<select id="selectYearlySales" resultMap="mem_payResult">
+		SELECT sales_year, total_sales FROM yearly_sales_view ORDER BY sales_year
+		DESC
+	</select>
+	<select id="findPwdForId" parameterType="String"
+		resultType="int">
+		SELECT COUNT(*) FROM member WHERE id = #{member_id}
+	</select>
+	<select id="searchMembersById" parameterType="string"
+		resultMap="memResult">
+		SELECT * FROM member WHERE id LIKE '%' || #{id} || '%'
+	</select>
+	<select id="findEmailById" resultType="String">
+		SELECT email FROM member WHERE id = #{member_id}
+	</select>
+	<update id="modPwdMember" parameterType="memberDTO">
+		UPDATE member
+		SET
+		pwd=#{pwd}
+		WHERE id=#{id}
+	</update>
+	<select id="selectByEmail" parameterType="string"
+		resultType="memberDTO">
+		SELECT * FROM member WHERE email = #{email}
+	</select>
+
+	<insert id="insertGoogleUser" parameterType="memberDTO">
+		INSERT INTO member (id, pwd, email, birth, gender,
+		phonenumber,name,regdate,join_type)
+		VALUES (#{id}, #{pwd}, #{email},
+		#{birth}, #{gender}, #{phonenumber},
+		#{name},sysdate,#{join_type})
+	</insert>
+
+	<!-- 회원가입시 쿠폰지급 -->
+   <insert id="addCoupon">
+      insert into coupon
+         (coupon_id,id,discount,coupon_name,is_used)
+         values
+         (#{coupon_id},#{id},#{discount},#{coupon_name},#{is_used})
+   </insert>
+   
+   <!-- 사용가능한 쿠폰 조회 -->
+   <select id="selectCoupon" parameterType="String" resultType="memberDTO">
+      select coupon_id,discount,coupon_name,expiration_date
+      from coupon
+      where id=#{loginId} and is_used = 'Y'
+   </select>
+   
+   <!-- 예약내역에서 쿠폰 사용여부 밑 쿠폰 이름조회 -->
+   <select id="selectCoupon1" parameterType="String" resultType="memberDTO">
+      select coupon_id,discount,coupon_name,expiration_date
+      from coupon
+      where id=#{loginId}
+   </select>
+   
+   <!-- 쿠폰적용후 결제시 사용불가로 변경 및 사용시간 삽입 -->
+   <update id="updateCouponStatus" parameterType="String">
+        UPDATE coupon
+        SET IS_USED = 'N',
+        USED_DATE = SYSDATE
+        WHERE coupon_id = #{coupon_id} AND IS_USED = 'Y'
+    </update>
+    
+    <!-- 예약취소시 쿠폰 반환 -->
+    <update id="modCoupon" parameterType="string">
+       update coupon
+       set is_used = 'Y'
+       where coupon_id = #{coupon_id} and is_used = 'N'
+    </update>
+    
+    <select id="getMyCoupon" parameterType="String" resultType="memberDTO">
+      select coupon_id,discount,coupon_name,expiration_date,used_date
+      from coupon
+      where id=#{loginId} and is_used = 'N'
+   </select>
+   
+   <delete id="delCoupon">
+   DELETE FROM coupon WHERE id = #{id} 
+   </delete>
+   
+</mapper> 

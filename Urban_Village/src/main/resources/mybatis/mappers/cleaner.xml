@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.cleaner">
+
+	<insert id="insertCleaner" parameterType="cleanerDTO">
+		INSERT INTO cleaner (
+		member_id,
+		address,
+		income_proof,
+		regdate,
+		moddate
+		) VALUES (
+		#{member_id},
+		#{address},
+		#{income_proof},
+		SYSDATE,
+		SYSDATE
+		)
+	</insert>
+	<select id="selectCleanerList" resultType="cleanerDTO">
+		SELECT
+		c.member_id,
+		m.name AS memberName,
+		m.phonenumber AS memberPhone,
+		m.birth
+		AS
+		memberBirth,
+		m.gender AS memberGender,
+		c.address,
+		c.income_proof AS
+		incomeProof,
+		c.regdate
+		FROM cleaner c
+		JOIN member m ON c.member_id = m.id
+		ORDER BY c.regdate DESC
+	</select>
+
+
+	<select id="selectCleanerDetail" parameterType="string"
+		resultType="cleanerDTO">
+		SELECT
+		c.member_id,
+		m.name AS memberName,
+		m.phonenumber AS memberPhone,
+		m.birth
+		AS memberBirth,
+		m.gender AS memberGender,
+		c.address,
+		c.income_proof AS
+		incomeProof,
+		c.regdate
+		FROM cleaner c
+		JOIN member m ON c.member_id = m.id
+		WHERE c.member_id = #{member_id}
+	</select>
+	
+	<select id="findAccByNullCleanerId" resultType="accDTO">
+	 	<!-- SELECT
+	 	accommodation_id,
+        admin_id,
+        accommodation_name,
+        accommodation_photo,
+        cleaner_admin_id,
+        capacity,
+        room_count,
+        bathroom_count,
+        bed_count,
+        wifi_avail,
+        review_data
+        price
+    FROM accommodation
+    WHERE cleaner_admin_id IS NULL -->
+     SELECT * FROM accommodation
+    WHERE cleaner_admin_id IS NULL
+	</select>
+	
+	<update id="addCleanerId" parameterType="accDTO">
+    UPDATE accommodation
+    SET cleaner_admin_id = #{cleaner_admin_id}
+    WHERE accommodation_id = #{accommodation_id}
+	</update>
+	
+	<delete id="cleanerIdDelete" parameterType="string">
+    DELETE FROM cleaner WHERE member_id = #{member_id}
+	</delete>
+	<select id="getAccCleanerId" resultType="string">
+    SELECT cleaner_admin_id
+    FROM accommodation
+    WHERE cleaner_admin_id IS NOT NULL
+	</select>
+	
+
+</mapper>
