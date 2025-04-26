@@ -269,7 +269,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 	private static final String TEMP_DIR = "D:\\image\\temp\\";
 	private static final String DEST_DIR = "D:\\image\\addImage\\";
 	private static final String ACCOMMODATION_IMAGE_REPO = "D:\\image\\addImage\\"; // 업데이트 시 이미지 저장 경로
-	
+
 	@Override
 	@RequestMapping("/accommodationPage.do")
 	public ModelAndView accommodationPage(@RequestParam("accommodation_name")String accommodationName,@RequestParam("accommodation_id") String accommodation_id, HttpServletResponse response, HttpServletRequest request) {
@@ -278,8 +278,8 @@ public class AccommodationControllerImpl implements AccommodationController {
 		mav.setViewName(viewName);
 		//이건 랭킹 숙소 가지고 오는거
 		List<String> topList = rankService.AccRankTop();
-	    mav.addObject("topList", topList);
-	    service.increaseViewCount(accommodation_id);
+		mav.addObject("topList", topList);
+		service.increaseViewCount(accommodation_id);
 		AccommodationDTO accommodation = service.findAccommodationId(accommodation_id);
 		session.setAttribute("accommodation", accommodation);
 		try {
@@ -295,7 +295,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 			System.out.println("Error fetching reviews: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return mav;
 	}
 
@@ -321,7 +321,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 	@RequestMapping(value = "/addNewAccommodation", method = RequestMethod.POST)
 	public ResponseEntity<String> addNewAccommodation(MultipartHttpServletRequest mRequest, HttpServletResponse response) throws Exception {
 		mRequest.setCharacterEncoding("utf-8");
-		Map<String, Object> accommodationMap = new HashMap<>();
+		Map<String, Object> accommodationMap = new HashMap<String, Object>();
 		Enumeration<String> enu = mRequest.getParameterNames();
 
 		while (enu.hasMoreElements()) {
@@ -331,7 +331,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 		}
 
 		List<MultipartFile> mFiles = mRequest.getFiles("accommodation_photo[]");
-		List<String> fileList = new ArrayList<>();
+		List<String> fileList = new ArrayList<String>();
 		if (mFiles != null && !mFiles.isEmpty()) {
 			for (MultipartFile mFile : mFiles) {
 				if (mFile != null && !mFile.isEmpty()) {
@@ -374,7 +374,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 			}
 
 			message = "<script>alert('숙소 등록이 성공적으로 완료되었습니다. ID: " + accommodationId + "'); location.href='" + mRequest.getContextPath() + "/accommodation/main.do';</script>";
-			resEnt = new ResponseEntity<>(message, responseHeaders, HttpStatus.OK);
+			resEnt = new ResponseEntity<String>(message, responseHeaders, HttpStatus.OK);
 		} catch (Exception e) {
 			if (fileList != null && !fileList.isEmpty()) {
 				for (String fileName : fileList) {
@@ -383,7 +383,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 				}
 			}
 			message = "<script>alert('오류가 발생했습니다. 다시 시도해 주세요'); location.href='" + mRequest.getContextPath() + "/accommodation/accommodationForm.do';</script>";
-			resEnt = new ResponseEntity<>(message, responseHeaders, HttpStatus.CREATED);
+			resEnt = new ResponseEntity<String>(message, responseHeaders, HttpStatus.CREATED);
 			e.printStackTrace();
 		}
 		return resEnt;
@@ -414,36 +414,36 @@ public class AccommodationControllerImpl implements AccommodationController {
 				return mav; 
 	}
 
-	
-	  @Override
-	  @RequestMapping("/delAccommodation.do")
-	  public ModelAndView delAccommodation(@RequestParam("accommodation_id") String accommodation_id, HttpServletResponse response, HttpServletRequest request) throws IOException {
-	  response.setContentType("text/html;charset=utf-8");
-	  PrintWriter out = response.getWriter();
-	  int result = 0;
-	  try {
-	  // 숙소 이미지 폴더 삭제
-	  File 삭제할폴더 = new File(DEST_DIR + accommodation_id);
-	  if (삭제할폴더.exists()) {
-	  FileUtils.deleteDirectory(삭제할폴더);
-	  }
 
-	  // 데이터베이스에서 숙소 삭제
-	  result = service.delAccommodation(accommodation_id);
+	@Override
+	@RequestMapping("/delAccommodation.do")
+	public ModelAndView delAccommodation(@RequestParam("accommodation_id") String accommodation_id, HttpServletResponse response, HttpServletRequest request) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		int result = 0;
+		try {
+			// 숙소 이미지 폴더 삭제
+			File 삭제할폴더 = new File(DEST_DIR + accommodation_id);
+			if (삭제할폴더.exists()) {
+				FileUtils.deleteDirectory(삭제할폴더);
+			}
 
-	  if (result == 1) {
-	  out.write("<script>alert('숙소 삭제에 성공했습니다!'); location.href='/Urban_Village/accommodation/accommodationList.do';</script>");
-	  } else {
-	  out.write("<script>alert('숙소 삭제에 실패했습니다.'); location.href='/Urban_Village/accommodation/accommodationList.do';</script>");
-	  }
-	  } catch (IOException e) {
-	  out.write("<script>alert('숙소 삭제 중 오류가 발생했습니다: " + e.getMessage() + "'); location.href='/Urban_Village/accommodation/accommodationList.do';</script>");
-	  e.printStackTrace();
-	  } finally {
-	  out.close();
-	  }
-	  return null;
-	  }
+			// 데이터베이스에서 숙소 삭제
+			result = service.delAccommodation(accommodation_id);
+
+			if (result == 1) {
+				out.write("<script>alert('숙소 삭제에 성공했습니다!'); location.href='/Urban_Village/accommodation/accommodationList.do';</script>");
+			} else {
+				out.write("<script>alert('숙소 삭제에 실패했습니다.'); location.href='/Urban_Village/accommodation/accommodationList.do';</script>");
+			}
+		} catch (IOException e) {
+			out.write("<script>alert('숙소 삭제 중 오류가 발생했습니다: " + e.getMessage() + "'); location.href='/Urban_Village/accommodation/accommodationList.do';</script>");
+			e.printStackTrace();
+		} finally {
+			out.close();
+		}
+		return null;
+	}
 
 	@RequestMapping("/modAccommodationForm.do")
 	public ModelAndView modAccommodationForm(@ModelAttribute("AccommodationDTO")AccommodationDTO accDTO,@RequestParam("accommodation_id") String accommodation_id, HttpServletResponse response, HttpServletRequest request) {
@@ -460,7 +460,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 	public ResponseEntity<String> updateAccommodation(MultipartHttpServletRequest multipartRequest,
 			HttpServletResponse response, HttpServletRequest request) throws Exception {
 		multipartRequest.setCharacterEncoding("utf-8");
-		Map<String, Object> accommodationMap = new HashMap<>();
+		Map<String, Object> accommodationMap = new HashMap<String, Object>();
 		ResponseEntity<String> resEntity = null;
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Type", "text/html; charset=utf-8");
@@ -475,7 +475,7 @@ public class AccommodationControllerImpl implements AccommodationController {
 
 			// 이미지 파일 처리 (기존 이미지 삭제 후 새로 업로드)
 			List<MultipartFile> mFiles = multipartRequest.getFiles("accommodation_photo[]");
-			List<String> fileList = new ArrayList<>();
+			List<String> fileList = new ArrayList<String>();
 
 			boolean hasValidFile = false;
 			if (mFiles != null && !mFiles.isEmpty()) {
@@ -519,12 +519,12 @@ public class AccommodationControllerImpl implements AccommodationController {
 					+ "&accommodation_name=" 
 					+ accommodation_name 
 					+ "';</script>";
-			resEntity = new ResponseEntity<>(message, headers, HttpStatus.CREATED);
+			resEntity = new ResponseEntity<String>(message, headers, HttpStatus.CREATED);
 
 		} catch (Exception e) {
 			String accommodation_id = multipartRequest.getParameter("accommodation_id");
 			String message = "<script>alert('오류가 발생했습니다. 다시 시도해주세요.'); location.href='" + request.getContextPath() + "/accommodation/accommodationPage.do?accommodation_id=" + accommodation_id +"?accommodation_name=" + accommodation_id + "';</script>";
-			resEntity = new ResponseEntity<>(message, headers, HttpStatus.CREATED);
+			resEntity = new ResponseEntity<String>(message, headers, HttpStatus.CREATED);
 			e.printStackTrace();
 		}
 		return resEntity;
@@ -545,114 +545,114 @@ public class AccommodationControllerImpl implements AccommodationController {
 
 	}
 
-	
+
 	@RequestMapping(value = "/searchAddress", method = RequestMethod.GET)
 	public ModelAndView searchAddress(@RequestParam("keyword") String keyword, HttpServletRequest session) {
-	    // 'ㆍ'로 키워드 분리
-	    List<String> regions = Arrays.asList(keyword.split("ㆍ"));
-	    String memberId = (String) session.getAttribute("loginId");
+		// 'ㆍ'로 키워드 분리
+		List<String> regions = Arrays.asList(keyword.split("ㆍ"));
+		String memberId = (String) session.getAttribute("loginId");
 
-	    // 검색 로직 처리
-	    List<AccommodationDTO> searchResults = service.searchAddress(regions);
-	    List<AccommodationDTO> accommodationList = service.accList();
+		// 검색 로직 처리
+		List<AccommodationDTO> searchResults = service.searchAddress(regions);
+		List<AccommodationDTO> accommodationList = service.accList();
 
-	    if (memberId != null) {
-	        for (AccommodationDTO acc : accommodationList) {
-	            boolean liked = wishListService.isLiked(memberId, acc.getAccommodation_id());
-	            acc.setLiked(liked); // AccommodationDTO에 setLiked(boolean) 필요
-	        }
-	    }
-	    enrichAccommodationInfo(searchResults); // 추가 데이터 삽입
-	    ModelAndView mav = new ModelAndView("/accommodation/searchResults");
-	    mav.addObject("searchResults", searchResults);
-	    mav.addObject("accommodationList",accommodationList);
-	    return mav;
+		if (memberId != null) {
+			for (AccommodationDTO acc : accommodationList) {
+				boolean liked = wishListService.isLiked(memberId, acc.getAccommodation_id());
+				acc.setLiked(liked); // AccommodationDTO에 setLiked(boolean) 필요
+			}
+		}
+		enrichAccommodationInfo(searchResults); // 추가 데이터 삽입
+		ModelAndView mav = new ModelAndView("/accommodation/searchResults");
+		mav.addObject("searchResults", searchResults);
+		mav.addObject("accommodationList",accommodationList);
+		return mav;
 	}
 
 	@RequestMapping(value = "/searchAccommodation", method = RequestMethod.GET)
 	public ModelAndView searchAccommodation(@RequestParam("keyword") String keyword, HttpServletRequest session) {
-	    // 검색 로직 처리
-	    List<AccommodationDTO> searchResults = service.searchAccommodation(keyword);
-	    List<AccommodationDTO> accommodationList = service.accList();
+		// 검색 로직 처리
+		List<AccommodationDTO> searchResults = service.searchAccommodation(keyword);
+		List<AccommodationDTO> accommodationList = service.accList();
 
-	    String memberId = (String) session.getAttribute("loginId");
+		String memberId = (String) session.getAttribute("loginId");
 
-	    if (memberId != null) {
-	        for (AccommodationDTO acc : accommodationList) {
-	            boolean liked = wishListService.isLiked(memberId, acc.getAccommodation_id());
-	            acc.setLiked(liked); // AccommodationDTO에 setLiked(boolean) 필요
-	        }
-	    }
-	    enrichAccommodationInfo(searchResults); // 추가 데이터 삽입
-	    ModelAndView mav = new ModelAndView("/accommodation/searchResults");
-	    mav.addObject("searchResults", searchResults);
-	    mav.addObject("accommodationList",accommodationList);
+		if (memberId != null) {
+			for (AccommodationDTO acc : accommodationList) {
+				boolean liked = wishListService.isLiked(memberId, acc.getAccommodation_id());
+				acc.setLiked(liked); // AccommodationDTO에 setLiked(boolean) 필요
+			}
+		}
+		enrichAccommodationInfo(searchResults); // 추가 데이터 삽입
+		ModelAndView mav = new ModelAndView("/accommodation/searchResults");
+		mav.addObject("searchResults", searchResults);
+		mav.addObject("accommodationList",accommodationList);
 
-	    return mav;
+		return mav;
 	}
-	
+
 	@RequestMapping("/main.do")
-	   public ModelAndView main(HttpServletResponse response, HttpServletRequest request) {
-	      ModelAndView mav = new ModelAndView();
-	      List<AccommodationDTO> accommodationList = service.accList();
-	       for (AccommodationDTO acc : accommodationList) {
-	              Double avgRating = rService.getAverageRatingByAccommodationId(acc.getAccommodation_id());
-	              if (avgRating == null) {
-	                  avgRating = 0.0;
-	              }
-	              acc.setAverageRating(avgRating);
-	              
-	            String latestReview = rService.getLatestReview(acc.getAccommodation_id()); // 최신 리뷰 한 개
-	            System.out.println(latestReview);
-	            acc.setLatestReview(latestReview);
-	            
-	          }
-	      
-	      mav.addObject("accommodationList", accommodationList);
-	      mav.setViewName("urbanMain");
-	      return mav;
-	   }
+	public ModelAndView main(HttpServletResponse response, HttpServletRequest request) {
+		ModelAndView mav = new ModelAndView();
+		List<AccommodationDTO> accommodationList = service.accList();
+		for (AccommodationDTO acc : accommodationList) {
+			Double avgRating = rService.getAverageRatingByAccommodationId(acc.getAccommodation_id());
+			if (avgRating == null) {
+				avgRating = 0.0;
+			}
+			acc.setAverageRating(avgRating);
+
+			String latestReview = rService.getLatestReview(acc.getAccommodation_id()); // 최신 리뷰 한 개
+			System.out.println(latestReview);
+			acc.setLatestReview(latestReview);
+
+		}
+
+		mav.addObject("accommodationList", accommodationList);
+		mav.setViewName("urbanMain");
+		return mav;
+	}
 
 	// 공통 처리 메서드
-		private void enrichAccommodationInfo(List<AccommodationDTO> list) {
-		    for (AccommodationDTO acc : list) {
-		        Double avgRating = rService.getAverageRatingByAccommodationId(acc.getAccommodation_id());
-		        acc.setAverageRating(avgRating != null ? avgRating : 0.0);
+	private void enrichAccommodationInfo(List<AccommodationDTO> list) {
+		for (AccommodationDTO acc : list) {
+			Double avgRating = rService.getAverageRatingByAccommodationId(acc.getAccommodation_id());
+			acc.setAverageRating(avgRating != null ? avgRating : 0.0);
 
-		        String latestReview = rService.getLatestReview(acc.getAccommodation_id());
-		        acc.setLatestReview(latestReview);
+			String latestReview = rService.getLatestReview(acc.getAccommodation_id());
+			acc.setLatestReview(latestReview);
 
-		        Integer reservationCount = service.getReservationCountByAccommodationId(acc.getAccommodation_id());
-		        acc.setReservation_count(reservationCount != null ? reservationCount : 0);
-		    }
+			Integer reservationCount = service.getReservationCountByAccommodationId(acc.getAccommodation_id());
+			acc.setReservation_count(reservationCount != null ? reservationCount : 0);
 		}
-		@RequestMapping("/sortedList")
-		public String sortAccommodations(@RequestParam("sort") String sort, Model model) {
-		    // 기본 숙소 목록
-		    List<AccommodationDTO> sortedList = service.accList();
+	}
+	@RequestMapping("/sortedList")
+	public String sortAccommodations(@RequestParam("sort") String sort, Model model) {
+		// 기본 숙소 목록
+		List<AccommodationDTO> sortedList = service.accList();
 
-		    // 정렬 적용
-		    if ("reservation".equals(sort)) {
-		        sortedList = service.getAccommodationsSortedByReservation();
-		    } else if ("views".equals(sort)) {
-		        sortedList = service.getAccommodationsSortedByViewCount();
-		    }
-
-		    // 정렬된 리스트에 평점, 리뷰, 예약 수 추가
-		    for (AccommodationDTO acc : sortedList) {
-		        Double avgRating = rService.getAverageRatingByAccommodationId(acc.getAccommodation_id());
-		        acc.setAverageRating(avgRating != null ? avgRating : 0.0);
-
-		        String latestReview = rService.getLatestReview(acc.getAccommodation_id());
-		        acc.setLatestReview(latestReview);
-
-		        Integer reservationCount = service.getReservationCountByAccommodationId(acc.getAccommodation_id());
-		        acc.setReservation_count(reservationCount != null ? reservationCount : 0);
-		    }
-
-		    model.addAttribute("accommodationList", sortedList);
-		    return "urbanMain"; // JSP 파일명
+		// 정렬 적용
+		if ("reservation".equals(sort)) {
+			sortedList = service.getAccommodationsSortedByReservation();
+		} else if ("views".equals(sort)) {
+			sortedList = service.getAccommodationsSortedByViewCount();
 		}
+
+		// 정렬된 리스트에 평점, 리뷰, 예약 수 추가
+		for (AccommodationDTO acc : sortedList) {
+			Double avgRating = rService.getAverageRatingByAccommodationId(acc.getAccommodation_id());
+			acc.setAverageRating(avgRating != null ? avgRating : 0.0);
+
+			String latestReview = rService.getLatestReview(acc.getAccommodation_id());
+			acc.setLatestReview(latestReview);
+
+			Integer reservationCount = service.getReservationCountByAccommodationId(acc.getAccommodation_id());
+			acc.setReservation_count(reservationCount != null ? reservationCount : 0);
+		}
+
+		model.addAttribute("accommodationList", sortedList);
+		return "urbanMain"; // JSP 파일명
+	}
 
 
 }

@@ -24,5 +24,6 @@ public interface ReservationController {
 
 	ModelAndView reservation(PayDTO payDTO, MemberDTO memberDTO, HttpServletRequest request,
 			HttpServletResponse response);
-	
+
+
 }

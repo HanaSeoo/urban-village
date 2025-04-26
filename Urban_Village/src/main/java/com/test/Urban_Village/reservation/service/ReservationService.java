@@ -16,4 +16,7 @@ public interface ReservationService {
 	public boolean isReservationConflict(String accommodation_id, Date checkin_date, Date checkout_date);
 	public List<Map<String, Object>> getReservedDates(String accommodation_id);
 	public List<PayDTO> getReservationHistory(String userId);
+	public boolean cancelPayment(String reservationId);
+	public String getImpUidByReservationId(String reservationId);
+	public PayDTO getReservationById(String reservation_id);
 }

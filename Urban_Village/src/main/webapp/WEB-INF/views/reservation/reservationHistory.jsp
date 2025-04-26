@@ -4,8 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <%
-    java.util.Date today = new java.util.Date(); // 현재 날짜
-    pageContext.setAttribute("today", today); // JSP에서 사용할 수 있도록 설정
+java.util.Date today = new java.util.Date(); // 현재 날짜
+pageContext.setAttribute("today", today); // JSP에서 사용할 수 있도록 설정
 %>
 
 <!DOCTYPE html>
@@ -28,17 +28,19 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 }
+
 body::before {
-  /* --- Background Overlay for Readability --- */
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(253, 252, 249, 0.3); /* 배경 이미지 위에 반투명 흰색 오버레이 */
-  z-index: -1;
+	/* --- Background Overlay for Readability --- */
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(253, 252, 249, 0.3); /* 배경 이미지 위에 반투명 흰색 오버레이 */
+	z-index: -1;
 }
+
 .main-content {
 	flex: 1;
 	display: flex;
@@ -201,7 +203,7 @@ h1 {
 			src="/Urban_Village/resources/helpCenterImage/countryside1.mp4"
 			type="video/mp4">
 	</video>
-	
+
 
 	<div class="main-content">
 		<div class="containerHistory">
@@ -260,10 +262,29 @@ h1 {
 							원
 						</div>
 					</div>
+					<div class="row">
+						<div class="label">합산 금액</div>
+						<div class="value"><fmt:formatNumber value="${reservation.total_price}"
+								pattern="#,###" />
+							 원</div>
+					</div>
+					<div class="row">
+						<div class="label">쿠폰 할인</div>
+						<div class="value text-success">
+							<c:choose>
+								<c:when test="${not empty reservation.coupon_id}">-<fmt:formatNumber
+										value="${reservation.total_price - reservation.final_price}"
+										pattern="#,###" /> 원
+            					</c:when>
+								<c:otherwise> 0 원
+           					    </c:otherwise>
+							</c:choose>
+						</div>
+					</div>
 					<div class="total-row">
 						<div class="label">총 가격</div>
 						<div class="value">
-							<fmt:formatNumber value="${reservation.total_price}"
+							<fmt:formatNumber value="${reservation.final_price}"
 								pattern="#,###" />
 							원
 						</div>
@@ -271,7 +292,7 @@ h1 {
 					<c:choose>
 						<c:when test="${reservation.checkin_date > today}">
 							<button class="btn cancel"
-								onclick="confirmCancel('${contextPath}/reservation/delReservation?reservation_id=${reservation.reservation_id}')">
+								onclick="confirmCancel('${reservation.reservation_id}')">
 								예약 취소</button>
 						</c:when>
 						<c:when test="${reservation.checkout_date < today}">
@@ -288,22 +309,26 @@ h1 {
 		</div>
 	</div>
 
-	<div class="footer">
-		<!-- 푸터 콘텐츠 -->
-	</div>
-
 	<script>
-        // 예약 취소 확인 함수
-        function confirmCancel(url) {
-            const userConfirmed = confirm("예약을 취소하시겠습니까?");
-            if (userConfirmed) {
-                // "확인"을 눌렀을 때 해당 URL로 이동
-                window.location.href = url;
-            } else {
-                // "취소"를 눌렀을 때 아무 일도 하지 않음 (현재 페이지 유지)
-                console.log("예약 취소가 취소되었습니다.");
-            }
-        }
-    </script>
+		// 예약 취소 확인 함수
+		function confirmCancel(reservationId) {
+			const userConfirmed = confirm("예약을 취소하시겠습니까?");
+			if (userConfirmed) {
+				// cancel.do 엔드포인트를 호출하여 데이터베이스와 결제 취소를 모두 처리
+				const form = document.createElement('form');
+				form.method = 'POST';
+				form.action = '${contextPath}/reservation/delReservation.do';
+
+				const input = document.createElement('input');
+				input.type = 'hidden';
+				input.name = 'reservation_id';
+				input.value = reservationId;
+
+				form.appendChild(input);
+				document.body.appendChild(form);
+				form.submit();
+			}
+		}
+	</script>
 </body>
 </html>

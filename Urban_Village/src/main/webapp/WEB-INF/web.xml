@@ -16,14 +16,14 @@
 	</listener>
 	
 	<!-- 400, 404에러 처리 페이지로 무조건 로그인 폼으로 보냄 -->
-	<error-page>
+	<!-- <error-page>
     	<error-code>400</error-code>
     	<location>/member/loginForm.do</location>
 	</error-page>
 	<error-page>
     	<error-code>404</error-code>
     	<location>/member/loginForm.do</location>
-	</error-page>
+	</error-page> -->
 	
 
 

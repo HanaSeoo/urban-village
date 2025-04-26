@@ -14,9 +14,14 @@ private double final_price;
 private String coupon_id;
 private String coupon_name;
 private int discount;
+private String imp_uid; // 추가된 필드
 
-
-
+public String getImp_uid() {
+    return imp_uid;
+}
+public void setImp_uid(String imp_uid) {
+    this.imp_uid = imp_uid;
+}
 public String getCoupon_id() {
    return coupon_id;
 }

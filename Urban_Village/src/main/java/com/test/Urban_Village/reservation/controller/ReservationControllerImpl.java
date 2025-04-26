@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,39 +58,6 @@ public class ReservationControllerImpl implements ReservationController {
         return mav;
     }
 
-	/*
-	 * @Override
-	 * 
-	 * @RequestMapping("/reservation.do") public ModelAndView
-	 * reservation(@ModelAttribute("PayDTO") PayDTO payDTO,
-	 * 
-	 * @ModelAttribute("MemberDTO") MemberDTO memberDTO, HttpServletRequest request,
-	 * HttpServletResponse response) { ModelAndView mav = new ModelAndView();
-	 * 
-	 * // 세션에서 사용자 ID 가져오기 session = request.getSession(false); if (session == null
-	 * || session.getAttribute("loginId") == null) {
-	 * mav.setViewName("redirect:/member/loginForm.do"); return mav; }
-	 * 
-	 * String loginId = (String) session.getAttribute("loginId");
-	 * payDTO.setId(loginId); // 사용자 ID 설정 try { // 예약 날짜가 겹치는지 확인 boolean
-	 * isConflict = service.isReservationConflict(payDTO.getAccommodation_id(),
-	 * payDTO.getCheckin_date(), payDTO.getCheckout_date()); if (isConflict) {
-	 * mav.addObject("errorMessage", "해당 날짜에는 예약이 불가능합니다.");
-	 * mav.setViewName("reservationForm"); // 예약 페이지로 돌아가도록 설정 return mav; } // 쿠폰
-	 * 사용 체크: 쿠폰 ID가 존재하면 쿠폰 상태 업데이트 if (memberDTO.getCoupon_id() != null &&
-	 * !memberDTO.getCoupon_id().isEmpty()) {
-	 * payDTO.setCoupon_id(memberDTO.getCoupon_id()); // ✅ 쿠폰 ID 꼭 저장 // available
-	 * 상태에서 사용되었음을 나타내기 위해 'Y'에서 'N'으로 변경
-	 * mService.updateCouponStatus(memberDTO.getCoupon_id());
-	 * 
-	 * } // 예약 정보 저장 service.addPay(payDTO); // 성공 시 리다이렉트
-	 * mav.setViewName("redirect:/reservation/reservationHistory.do"); } catch
-	 * (Exception e) { e.printStackTrace();
-	 * 
-	 * }
-	 * 
-	 * return mav; }
-	 */
     @Override 
     @RequestMapping("/reservation.do") 
     public ModelAndView reservation(@ModelAttribute("PayDTO") PayDTO payDTO, 
@@ -217,32 +185,65 @@ public class ReservationControllerImpl implements ReservationController {
         return mav;
     }
     
-    @RequestMapping("delReservation")
-    public ModelAndView delReservation(@RequestParam("reservation_id") String reservation_id,
-                               @ModelAttribute("MemberDTO") MemberDTO memberDTO,
-                               HttpServletRequest request,
-                               HttpServletResponse response) throws IOException {
-       
-       response.setContentType("text/html;charset=utf-8");
-      PrintWriter out = response.getWriter();
-       System.out.println("쿠폰아이디 :"+memberDTO.getCoupon_id());
-       if(memberDTO.getCoupon_id()!=null) {
-          int result1 = mService.modCoupon(memberDTO.getCoupon_id());
-          if(result1 == 1) {
-             out.write("<script>");
-             out.write("alert('사용하신 쿠폰을 회원님 계정에 재발급되었습니다!');");
-             out.write("</script>");
-           }
-       }
-       
-       int result = service.delReservation(reservation_id);
-       if(result == 1) {
-          out.write("<script>");
-         out.write("alert('예약 취소 되었습니다!');");
-         out.write("location.href='/Urban_Village/reservation/reservationHistory.do';");
-         out.write("</script>");
-       }
-       return null;
+    @RequestMapping("/delReservation.do")
+    public void delReservation(@RequestParam("reservation_id") String reservation_id,
+                          @ModelAttribute("MemberDTO") MemberDTO memberDTO,
+                          HttpServletRequest request,
+                          HttpServletResponse response) throws IOException {
+        
+        response.setContentType("text/html;charset=utf-8");
+        PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession();
+        
+        try {
+            // 예약 정보 가져오기
+            PayDTO reservationInfo = service.getReservationById(reservation_id);
+            
+            // 결제 취소 시도
+            boolean paymentCancelled = service.cancelPayment(reservation_id);
+            
+            if (paymentCancelled) {
+                // 예약 삭제 시도
+                int result = service.delReservation(reservation_id);
+                
+                if (result == 1) {
+                    // 취소 정보 생성
+                    Map<String, Object> cancelInfo = new HashMap<>();
+                    cancelInfo.put("reservation_id", reservation_id);
+                    cancelInfo.put("accommodation_name", reservationInfo.getAccommodation_name());
+                    cancelInfo.put("checkin_date", reservationInfo.getCheckin_date());
+                    cancelInfo.put("checkout_date", reservationInfo.getCheckout_date());
+                    cancelInfo.put("amount", reservationInfo.getFinal_price());
+                    cancelInfo.put("cancel_date", new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+                    
+                    // 세션에 취소 정보 저장
+                    session.setAttribute("cancelInfo", cancelInfo);
+                    System.out.println("캔슬인포 내용:"+cancelInfo);
+                    // JavaScript로 페이지 이동
+                    out.write("<script>");
+                    out.write("location.href='/Urban_Village/reservation/cancelSuccess.do';");
+                    out.write("</script>");
+                } else {
+                    // 예약 삭제 실패
+                    out.write("<script>");
+                    out.write("alert('결제는 취소되었으나 예약 정보 삭제에 실패했습니다.');");
+                    out.write("location.href='" + request.getContextPath() + "/reservation/reservationHistory.do';");
+                    out.write("</script>");
+                }
+            } else {
+                // 결제 취소 실패
+                out.write("<script>");
+                out.write("alert('결제 취소에 실패했습니다.');");
+                out.write("history.back();");
+                out.write("</script>");
+            }
+        } catch (Exception e) {
+            out.write("<script>");
+            out.write("alert('처리 중 오류가 발생했습니다: " + e.getMessage() + "');");
+            out.write("history.back();");
+            out.write("</script>");
+            e.printStackTrace();
+        }
     }
     
     @RequestMapping("/getReservationHistory.do")
@@ -262,5 +263,26 @@ public class ReservationControllerImpl implements ReservationController {
 
         return "/member/urbanMemberList";
     }
+    
+    @RequestMapping("/cancelSuccess.do")
+    public ModelAndView cancelSuccess(HttpServletRequest request) {
+        ModelAndView mav = new ModelAndView();
+        HttpSession session = request.getSession();
+        @SuppressWarnings("unchecked")
+		Map<String, Object> cancelInfo = (Map<String, Object>) session.getAttribute("cancelInfo");
+        System.out.println("켄슬 페이지 들어옴");
+        if (cancelInfo != null) {
+            mav.addObject("cancelInfo", cancelInfo);
+            //session.removeAttribute("cancelInfo");
+        } else {
+            mav.addObject("error", "취소 정보를 찾을 수 없습니다");
+        }
+        
+        // 타일즈 정의와 정확히 일치하도록 설정
+        mav.setViewName("/reservation/reservationHistory"); // 잘 작동하는 다른 JSP
+        
+        return mav;
+    }
+    
     
 }

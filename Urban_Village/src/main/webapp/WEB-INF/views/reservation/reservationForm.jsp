@@ -192,13 +192,19 @@ window.requestPay = function() {
             buyer_tel: buyer_tel, // 예약자 전화번호
         }, function(rsp) {
             if (rsp.success) {
-                alert("✅ 결제가 완료되었습니다!");
-                document.getElementById("paymentForm").submit();
-
-            } else {
-                alert("❌ 결제에 실패했습니다.\n사유: " + rsp.error_msg);
-            }
-        });
+                // imp_uid를 폼에 추가
+            	 const impUidInput = document.createElement('input');
+                 impUidInput.type = 'hidden';
+                 impUidInput.name = 'imp_uid';
+                 impUidInput.value = rsp.imp_uid;
+                 document.getElementById("paymentForm").appendChild(impUidInput);
+                 
+                 alert("✅ 결제가 완료되었습니다!");
+                 document.getElementById("paymentForm").submit();
+             } else {
+                 alert("❌ 결제에 실패했습니다.\n사유: " + rsp.error_msg);
+             }
+         });
     } else {
         console.error("❌ IMP가 정의되지 않았습니다. 페이지를 새로고침해 주세요.");
         alert("결제 모듈이 로드되지 않았습니다. 페이지를 새로고침 후 다시 시도해주세요.");

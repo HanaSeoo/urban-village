@@ -141,7 +141,7 @@ public class AdminControllerImpl implements AdminController {
 		accDTO.setAdmin_id(adminId);
 		List<AccommodationDTO> accExceptBestList = adminService.accExceptBest(accDTO);
 		mav.addObject("accExceptBest",accExceptBestList);
-		mav.setViewName(viewName);
+		mav.setViewName("/admin/hostAccBest");
 
 		return mav;
 	}

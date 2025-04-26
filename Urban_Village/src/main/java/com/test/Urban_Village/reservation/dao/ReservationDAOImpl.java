@@ -57,6 +57,11 @@ public class ReservationDAOImpl implements ReservationDAO {
    public List<PayDTO> selectReservationHistoryByUserId(String userId) {
       return sqlSession.selectList("mapper.reservation.selectReservationHistoryByUserId", userId);
    }
-
-
+   @Override
+   public String getImpUidByReservationId(String reservationId) {
+       return sqlSession.selectOne("mapper.reservation.getImpUidByReservationId", reservationId);
+   }
+   public PayDTO getReservationById(String reservationId) {
+	    return sqlSession.selectOne("mapper.reservation.getReservationById", reservationId);
+	}
 }

@@ -27,8 +27,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 	    //고객 접근하기 그외 ㄴㄴ
 	    if (uri.contains("/member/myInfo.do") || uri.contains("/member/myCoupon.do")
 		        || uri.contains("/reservation/reservationHistory.do") || uri.contains("/reservation/reservationForm.do") 
-		        || uri.contains("/reservation/reviewWrite.do") || uri.contains("/wishList/wishList.do") || uri.contains("/member/deleteMemberForm.do")) {
-
+		        || uri.contains("/reservation/reviewWrite.do") || uri.contains("/wishList/wishList.do") || uri.contains("/member/deleteMemberForm.do")
+		        || uri.contains("/reservation/cancelSuccess.do")) {
 	        if (!memberLogin || adminLogin) {
 	            response.sendRedirect(request.getContextPath() + "/member/loginForm.do");
 	            return false;

@@ -21,28 +21,33 @@
 		reservation_id = #{reservation_id}
 	</delete>
 	<insert id="addPay" parameterType="payDTO">
-		INSERT INTO pay (
-		accommodation_id,
-		id,
-		reservation_id,
-		checkin_date,
-		checkout_date,
-		guest_count,
-		total_price,
-		final_price,
-		coupon_id
-		) VALUES (
-		#{accommodation_id},
-		#{id},
-		#{reservation_id}, <!-- JSP에서 전달된 reservation_id -->
-		#{checkin_date},
-		#{checkout_date},
-		#{guest_count},
-		#{total_price},
-		#{final_price},
-		#{coupon_id}
-		)
-	</insert>
+    INSERT INTO pay (
+        accommodation_id,
+        id,
+        reservation_id,
+        checkin_date,
+        checkout_date,
+        guest_count,
+        total_price,
+        final_price,
+        coupon_id,
+        imp_uid  <!-- 추가된 부분 -->
+    ) VALUES (
+        #{accommodation_id},
+        #{id},
+        #{reservation_id},
+        #{checkin_date},
+        #{checkout_date},
+        #{guest_count},
+        #{total_price},
+        #{final_price},
+        #{coupon_id},
+        #{imp_uid}  <!-- 추가된 부분 -->
+    )
+</insert>
+<select id="getImpUidByReservationId" parameterType="string" resultType="string">
+    SELECT imp_uid FROM pay WHERE reservation_id = #{reservation_id}
+</select>
 	<select id="payList" resultMap="payResult">
 		select * from pay order by
 		reservation_id asc
@@ -91,6 +96,8 @@
         WHERE
             id = #{userId}
     </select>
-
+<select id="getReservationById" resultType="payDTO" parameterType="string">
+    SELECT * FROM pay WHERE reservation_id = #{reservationId}
+</select>
 
 </mapper> 

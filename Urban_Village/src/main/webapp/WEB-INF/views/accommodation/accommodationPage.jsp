@@ -21,9 +21,7 @@ long currentTimestamp = System.currentTimeMillis();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title></title>
-<script type="text/javascript"
-	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4144168e9f9cd514608615aac5e437e5&libraries=services">
-</script>
+
 <!-- 달력 -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -34,7 +32,8 @@ long currentTimestamp = System.currentTimeMillis();
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4144168e9f9cd514608615aac5e437e5&autoload=false&libraries=services"></script>
 
 <style>
 .heart {
@@ -396,7 +395,7 @@ opacity: 1;
 							</div>
 						</c:if>
 					</c:forEach>
-					<c:if test="${fn:length(images) > 5}">
+					<c:if test="${fn:length(images) > 1}">
 						<div class="sub-image more-button">
 							<button onclick="openImageModal()">사진 모두 보기</button>
 						</div>
@@ -581,36 +580,36 @@ function calculatePrice() {
 
 // 지도 초기화 함수
 function initKakaoMap() {
-    var container = document.getElementById('map');
-    var options = {
-        center: new kakao.maps.LatLng(37.653, 127.236),
-        level: 5
-    };
+    kakao.maps.load(() => {
+        var container = document.getElementById('map');
+        var options = {
+            center: new kakao.maps.LatLng(37.653, 127.236),
+            level: 5
+        };
+        var map = new kakao.maps.Map(container, options);
+        var roadAddress = '${sessionScope.accommodation.accommodation_address}';
+        var geocoder = new kakao.maps.services.Geocoder();
 
-    var map = new kakao.maps.Map(container, options);
-    var roadAddress = '${sessionScope.accommodation.accommodation_address}';
-    var geocoder = new kakao.maps.services.Geocoder();
-
-    geocoder.addressSearch(roadAddress, function(result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-            var marker = new kakao.maps.Marker({
-                map: map,
-                position: coords
-            });
-
-            var infowindow = new kakao.maps.InfoWindow({
-                content: '<div style="padding:5px; text-align: center; font-weight: bold; white-space: nowrap;">숙소 : ${sessionScope.accommodation.accommodation_name}</div>'
-            });
-            infowindow.open(map, marker);
-
-            map.setCenter(coords);
-        } else {
-            alert("주소를 찾을 수 없습니다.");
-        }
+        geocoder.addressSearch(roadAddress, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords
+                });
+                var infowindow = new kakao.maps.InfoWindow({
+                    content: '<div style="padding:5px; text-align: center; font-weight: bold; white-space: nowrap;">숙소 : ${sessionScope.accommodation.accommodation_name}</div>'
+                });
+                infowindow.open(map, marker);
+                map.setCenter(coords);
+            } else {
+                alert("주소를 찾을 수 없습니다.");
+            }
+        });
     });
 }
+
+window.onload = initKakaoMap;
 
 // 예약 페이지 이동 함수
 function goToReservation() {
@@ -978,9 +977,6 @@ function applyReservedStyle(instance, disabledDates) {
 
 
 
-
-// 페이지 로드 시 지도 표시
-window.onload = initKakaoMap;
 
 </script>
 </body>

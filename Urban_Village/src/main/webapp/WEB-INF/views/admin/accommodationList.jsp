@@ -20,7 +20,6 @@ body {
    padding: 0;
    background-color: #faf7f2; /* 한옥 느낌의 따뜻한 배경색 */
    color: #4e3629; /* 나무색과 유사한 텍스트 색상 */
-    padding-top: 80px; /* 상단 네비게이션바 고정에 따른 패딩 */
 }
 
 .container {
