@@ -96,8 +96,12 @@
         WHERE
             id = #{userId}
     </select>
-<select id="getReservationById" resultType="payDTO" parameterType="string">
-    SELECT * FROM pay WHERE reservation_id = #{reservationId}
+<select id="getReservationById" resultType="payDTO" parameterType="String">
+    SELECT p.*, a.accommodation_name
+    FROM pay p
+    JOIN accommodation a ON p.accommodation_id = a.accommodation_id
+    WHERE p.reservation_id = #{reservation_id}
 </select>
+
 
 </mapper> 

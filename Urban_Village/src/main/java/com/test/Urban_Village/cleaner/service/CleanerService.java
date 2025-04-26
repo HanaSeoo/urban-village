@@ -18,6 +18,8 @@ public interface CleanerService {
 
 	int cleanerIdDelete(String cleaner_admin_id);
 
+	public boolean hasAlreadyApplied(String loginId);
+
 
 	
 

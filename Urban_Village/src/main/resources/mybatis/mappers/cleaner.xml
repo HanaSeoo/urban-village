@@ -3,7 +3,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="mapper.cleaner">
+ <mapper namespace="mapper.cleaner">
 
 	<insert id="insertCleaner" parameterType="cleanerDTO">
 		INSERT INTO cleaner (
@@ -58,21 +58,6 @@
 	</select>
 	
 	<select id="findAccByNullCleanerId" resultType="accDTO">
-	 	<!-- SELECT
-	 	accommodation_id,
-        admin_id,
-        accommodation_name,
-        accommodation_photo,
-        cleaner_admin_id,
-        capacity,
-        room_count,
-        bathroom_count,
-        bed_count,
-        wifi_avail,
-        review_data
-        price
-    FROM accommodation
-    WHERE cleaner_admin_id IS NULL -->
      SELECT * FROM accommodation
     WHERE cleaner_admin_id IS NULL
 	</select>
@@ -86,11 +71,17 @@
 	<delete id="cleanerIdDelete" parameterType="string">
     DELETE FROM cleaner WHERE member_id = #{member_id}
 	</delete>
+	
 	<select id="getAccCleanerId" resultType="string">
     SELECT cleaner_admin_id
     FROM accommodation
     WHERE cleaner_admin_id IS NOT NULL
 	</select>
-	
+	<select id="hasAlreadyApplied" resultType="int" parameterType="String">
+    SELECT COUNT(*) 
+    FROM cleaner 
+    WHERE member_id = #{loginId}
+</select>
+
 
 </mapper>

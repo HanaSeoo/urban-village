@@ -27,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,8 +53,14 @@ public class CleanerControllerImpl implements CleanerController{
 	@Override
 	@RequestMapping("/cleanerForm.do")
 	public ModelAndView CleanerForm(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView mav = new ModelAndView();
 		String viewName = (String) request.getAttribute("viewName");
-		return new ModelAndView(viewName);
+		String loginId = (String) request.getSession().getAttribute("loginId");
+	    boolean alreadyApplied = service.hasAlreadyApplied(loginId);
+	    System.out.println("클리너 정보"+ alreadyApplied);
+	    mav.addObject("alreadyApplied", alreadyApplied);
+	    mav.setViewName(viewName);
+		return mav;
 	}
 	@Override
 	@RequestMapping(value="/joinCleaner.do", method=RequestMethod.POST)
@@ -233,6 +240,16 @@ public class CleanerControllerImpl implements CleanerController{
 		return null;
 		
 	}
+	
+	@RequestMapping("/applyForm")
+	public String showCleanerForm(HttpServletRequest request, Model model) {
+	    String loginId = (String) request.getSession().getAttribute("loginId");
+	    boolean alreadyApplied = service.hasAlreadyApplied(loginId);
+	    System.out.println("클리너 정보"+ alreadyApplied);
+	    model.addAttribute("alreadyApplied", alreadyApplied);
+	    return "cleaner/cleanerForm"; 
+	}
+	
 	@Override
 	@RequestMapping("/jusoPopup") 
 	public void jusoPopup() { 

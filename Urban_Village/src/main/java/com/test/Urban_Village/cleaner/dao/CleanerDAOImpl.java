@@ -40,7 +40,11 @@ public class CleanerDAOImpl implements CleanerDAO {
 		return session.delete("mapper.cleaner.cleanerIdDelete", cleaner_admin_id);
 	}
 
-
+	@Override
+	public boolean hasAlreadyApplied(String loginId) {
+	    Integer count = session.selectOne("mapper.cleaner.hasAlreadyApplied", loginId);
+	    return count != null && count > 0;
+	}
 
 
 }

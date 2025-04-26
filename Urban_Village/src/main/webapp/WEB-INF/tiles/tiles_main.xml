@@ -169,10 +169,11 @@
       <put-attribute name="body"
          value="/WEB-INF/views/reservation/reviewWrite.jsp"></put-attribute>
     </definition>
-    <!-- <definition name="/reservation/cancelSuccess"  extends="mainLayout">
+    
+    <definition name="/reservation/cancelSuccess"  extends="mainLayout">
       <put-attribute name="title" value="취소내역"></put-attribute>
       <put-attribute name="body"
          value="/WEB-INF/views/reservation/cancelSuccess.jsp"></put-attribute>
-    </definition> -->
+    </definition>
     
 </tiles-definitions>

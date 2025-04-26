@@ -15,6 +15,7 @@ public interface CleanerDAO {
 	int addCleanerId(AccommodationDTO accDTO);
 
 	int cleanerIdDelete(String cleaner_admin_id);
+	public boolean hasAlreadyApplied(String loginId);
 
 
 }

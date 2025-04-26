@@ -140,12 +140,6 @@ function previewImages(event) {
     }
 }
 
-function toggleEditForm() {
-    const detailView = document.getElementById('detailView');
-    const editForm = document.getElementById('editForm');
-    detailView.classList.toggle('hidden');
-    editForm.classList.toggle('hidden');
-}
 </script>
 </head>
 <body>
@@ -164,10 +158,9 @@ function toggleEditForm() {
                alt="기존 숙소 이미지">
          </c:forEach>
       </div>
-      <button class="btn btn-primary mt-3" onclick="toggleEditForm()">수정하기</button>
    </div>
-
-   <div id="editForm" class="hidden">
+<hr>
+   <div id="editForm">
       <h2>숙소 정보 수정</h2>
       <form id="updateAccommodationForm" action="${contextPath}/accommodation/accommodationUpdate.do" method="post" enctype="multipart/form-data">
          <input type="hidden" name="accommodation_id" value="${accommodation.accommodation_id}" />
@@ -230,7 +223,7 @@ function toggleEditForm() {
                <option value="N" ${accommodation.wifi_avail == 'N' ? 'selected' : ''}>N</option>
             </select>
          </div>
-
+<hr>
          <button type="submit" class="btn btn-primary">수정 완료</button>
          <button type="button" class="btn btn-secondary" onclick="toggleEditForm()">취소</button>
       </form>

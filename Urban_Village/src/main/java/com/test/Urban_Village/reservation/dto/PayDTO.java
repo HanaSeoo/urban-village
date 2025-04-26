@@ -15,6 +15,8 @@ private String coupon_id;
 private String coupon_name;
 private int discount;
 private String imp_uid; // 추가된 필드
+private String accommodation_name;
+
 
 public String getImp_uid() {
     return imp_uid;
@@ -52,7 +54,6 @@ public String getAccommodation_name() {
 public void setAccommodation_name(String accommodation_name) {
    this.accommodation_name = accommodation_name;
 }
-private String accommodation_name;
 
 public String getReservation_id() {
    return reservation_id;

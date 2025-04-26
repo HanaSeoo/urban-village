@@ -45,6 +45,11 @@ public class CleanerServiceImpl implements CleanerService {
 		return dao.cleanerIdDelete(cleaner_admin_id);
 	}
 
+	@Override
+	public boolean hasAlreadyApplied(String loginId) {
+		// TODO Auto-generated method stub
+		return dao.hasAlreadyApplied(loginId);
+	}
 
 
 

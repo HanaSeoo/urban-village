@@ -279,7 +279,7 @@ public class ReservationControllerImpl implements ReservationController {
         }
         
         // 타일즈 정의와 정확히 일치하도록 설정
-        mav.setViewName("/reservation/reservationHistory"); // 잘 작동하는 다른 JSP
+        mav.setViewName("/reservation/cancelSuccess"); // 잘 작동하는 다른 JSP
         
         return mav;
     }

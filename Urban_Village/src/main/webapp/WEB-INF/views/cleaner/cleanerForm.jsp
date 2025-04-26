@@ -140,8 +140,15 @@
 </video>
     
     <div class="main-content">
-        <div class="container">
-            <h2>지역 연계 일자리 지원 양식</h2>
+    <div class="container">
+        <c:choose>
+            <c:when test="${alreadyApplied}">
+                <div class="alert alert-warning text-center mt-5">
+                    <h3>이미 클리너로 지원하셨습니다.</h3>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <h2>지역 연계 일자리 지원 양식</h2>
             <form action="${contextPath}/cleaner/joinCleaner.do" method="post" enctype="multipart/form-data">
                 <!-- member 정보는 출력만 하고 수정 불가 -->
                 <div class="mb-3">
@@ -185,9 +192,11 @@
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary">등록</button>
                 </div>
-            </form>
-        </div>
+             </form>
+            </c:otherwise>
+        </c:choose>
     </div>
+</div>
 
     
     <script type="text/javascript">
