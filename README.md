@@ -18,7 +18,10 @@
 </p>
 
 ## 🛠️ 기술 스택
-
+### Database ERD 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5e63ed13-4394-4687-98c1-6e705bec1f95" width="300" alt="Image">
+</p>
 ### 백엔드
 <img src="https://github.com/user-attachments/assets/098cf956-2b31-4b9c-b796-a2a9c490481a" width="24" height="24"> Java 11: https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html<br>
 <img src="https://github.com/user-attachments/assets/d713e7ce-f1c9-4b7e-b304-86b1ec4a2377" width="24" height="24"> Spring MVC: https://spring.io/projects/spring-framework<br>
