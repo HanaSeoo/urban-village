@@ -1,12 +1,12 @@
-# 📌 시골 마을 활성화 프로젝트
+# 시골 마을 활성화 프로젝트
 <p align="center">
   <img src="https://github.com/user-attachments/assets/aca5cb03-00e5-42fa-bc91-2f9ca74ee7b3" width="300" alt="Image">
 </p>
 
-## 📖 소개
+## 소개
 저희 프로젝트는 인구감소에 따른 지역문제를 해결하고자 지역의 자원인 빈집을 활용하여 시골 지역을 되살리는 프로젝트입니다. 지역 숙소를 등록하고 예약을 관리하며, 숙소를 청소하는 청소관리자를 지역에 거주하는 일자리가 없는 노인분들로 선정하여 노인일자리 창출에 기여하며, 숙소를 운영하며 생기는 소득을 마을 자치금으로 운영할 수 있도록 하는 웹 사이트를 제작하였습니다.
 
-## ✨ 주요 기능
+## 주요 기능
 ### 회원 기능
 <p align="center">
   <img src="https://github.com/user-attachments/assets/3f45523e-659d-4b2a-8f6a-f6d2d9b5aece" width="300" alt="Image">
@@ -17,7 +17,7 @@
   <img src="https://github.com/user-attachments/assets/872ef4a1-5491-4106-814e-6b1300c32e3d" width="300" alt="Image">
 </p>
 
-## 🛠️ 기술 스택
+## 기술 스택
 ### Database ERD 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/5e63ed13-4394-4687-98c1-6e705bec1f95" width="300" alt="Image">
@@ -41,7 +41,7 @@
 <img src="https://github.com/user-attachments/assets/d58810d0-40ef-471b-b952-f712c0f9a279" width="24" height="24"> JavaScript<br>
 <img src="https://github.com/user-attachments/assets/9edd1866-b56d-4d44-8655-8c6826437007" width="24" height="24"> jQuery: https://jquery.com/download/
 
-## 📋 개발 환경
+## 개발 환경
 ```
 - 개발 환경
   - Java 1.6
@@ -81,7 +81,7 @@
   - Log4j 1.2.15
 ```
 
-## 📊 프로젝트 구조
+## 프로젝트 구조
 ```
 Urban_Village
 ├── src/main/java/com.test.Urban_Village
@@ -110,7 +110,7 @@ Urban_Village
 └── pom.xml             # Maven 프로젝트 설정
 ```
 
-## 🔖 사용 API
+## 사용 API
 - 구글 로그인 API: https://developers.google.com/identity/gsi/web/guides/overview
 - 카카오 지도 API: https://apis.map.kakao.com/web/guide/
 - 포트원 결제 API: https://developers.portone.io/docs/ko/overview
@@ -123,6 +123,4 @@ Urban_Village
 - 서하나 : [노션 포트폴리오](https://www.notion.so/1b9db822a28e801eb04af2f96ab48d5a)
 - 최승필 : [노션 포트폴리오](https://www.notion.so/1e3c0872a5f880ac8e10e228219cd836?pvs=4)
 
-<div align="center">
-  <p>⭐️ 이 프로젝트가 마음에 드셨다면 star를 눌러주세요! ⭐️</p>
-</div>
+
